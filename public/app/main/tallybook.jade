@@ -1,0 +1,82 @@
+.row
+    .col-md-4
+        .row
+            h2 Category
+            ul
+                li(ng-repeat="category in categories")
+                    input.col-md-3(type='text', placeholder='Name', ng-model="category.name", required)
+                    select(ng-model="category.type")
+                        option(value="expense") Expense
+                        option(value="income") Income
+                    button.btn(ng-click="removeCategory(category)")
+                        i.glyphicon.glyphicon-minus
+                    button.btn.btn-success(ng-click="save(category)") Save
+            button.btn(ng-click="addCategory()")
+                i.glyphicon.glyphicon-plus
+
+        .row
+            p
+                button.btn.btn-success(ng-click="save()")
+                    i.icon-hdd.icon-white
+                    | Save
+                button.btn.btn-danger(ng-click="clear()")
+                    i.icon-trash.icon-white
+                    | Erase
+
+        .row
+            p.input-group
+                input.form-control(type='text', placeholder='Name', autofocus=true, ng-model="dt", required, datepicker-popup="{{format}}", is-open="opened", ng-required="true", close-text="Close")
+                span.input-group-btn
+                    button.btn.btn-default(ng-click="open($event)")
+                        i.glyphicon.glyphicon-calendar
+            select(ng-model="category" ng-options="c.name group by c.type for c in categories")
+            |$
+            input(type="number" ng-model="amount" ng-required="true")
+            button.btn(ng-click="addRecord()")
+                i.glyphicon.glyphicon-plus
+                | Add
+
+    .col-md-8
+        form.well
+            label Name
+            input(type="text" name="name" ng-model="newcontact.name")
+            label Email
+            input(type="text" name="name" ng-model="newcontact.email")
+            label Phone
+            input(type="text" name="name" ng-model="newcontact.phone")
+            input(type="hidden" ng-model="newcontact.id")
+            input.btn.btn-primary(type="button" value="Save" ng-click="saveContact()")
+
+        tabset
+            tab(ng-repeat="tab in monthTabs" heading="{{tab.title}}" active="tab.active" ng-click="setCurrentMonth($index)")
+                table.table.table-striped.table-bordered.table-hover
+                    thead
+                        tr
+                            th Date
+                            th Category
+                            th Expenses
+                            th Incomes
+                            th Comments
+                            th Action
+                    tbody
+                        //tr(ng-repeat="r in records | orderBy:'date' track by $index")
+                        tr(ng-repeat="r in records")
+                            td {{ r.date | date:'mediumDate' }}
+                            td {{ r.category.name | ucfirst }}
+                            td {{ r.category.type === 'expense' ? (r.amount | currency) : '' }}
+                            td {{ r.category.type === 'income' ? (r.amount | currency) : '' }}
+                            td
+                            td
+                                a(ng-click="deleteRecord(r)") delete
+                        tr
+                            td
+                                strong Total
+                            td
+                            td {{ total('expense') | currency }}
+                            td {{ total('income') | currency }}
+                            td {{ total('income') - total('expense') | currency }}
+                            td
+
+p
+    |App version: v
+    span(app-version)

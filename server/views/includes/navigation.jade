@@ -1,0 +1,39 @@
+.navbar.navbar-default.navbar-fixed-top(ng-controller="appNavBarLoginCtrl")
+  .container
+    .navbar-header
+      button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.navbar-brand(href='/')
+        span.fa-stack
+          i.fa.fa-square-o.fa-stack-2x
+          i.fa.fa-book.fa-stack-1x.inverse
+        b Tally Book
+    .collapse.navbar-collapse
+      ul.nav.navbar-nav
+        li(ng-class="{active: title=='Home | Tally Book'}")
+          a(href='/') Home
+        li(ng-class="{active: title=='Contact | Tally Book'}")
+          a(href='/contact') Contact
+        li(ng-class="{active: title=='My Tally Book | Tally Book'}" ng-show="identity.isAuthenticated()")
+          a(href='/mytallybook') My Tally Book
+      ul.nav.navbar-nav.navbar-right(ng-hide="identity.isAuthenticated()")
+        li(ng-class="{active: title=='Login | Tally Book'}")
+            a(href='/login') Login
+          li(ng-class="{active: title=='Signup | Tally Book'}")
+              a(href='/signup') Signup
+      ul.nav.navbar-nav.navbar-right(ng-show="identity.isAuthenticated()")
+        li.dropdown
+            a.dropdown-toggle(href="", data-toggle="dropdown")
+                | {{identity.currentUser.email}}
+                b.caret
+            ul.dropdown-menu
+                li(ng-show="identity.currentUser.isAdmin()")
+                    a(href="/admin/users") User Admin
+                li
+                    a(href="/profile") Profile
+                li
+                    a(href="/", ng-click="signout()") Sign Out
+
